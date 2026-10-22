@@ -60,10 +60,10 @@ cs-training.csv
 ```
 credit-risk-default-prediction/
 ├── data/
-│   ├── raw/              put cs-training.csv here
-│   └── processed/        generated CSVs
-├── models/               saved XGBoost model (generated)
-├── reports/figures/      SHAP plots (generated)
+│   ├── raw/              empty on GitHub, put cs-training.csv here
+│   └── processed/        empty on GitHub, filled by data_prep.py
+├── models/               empty on GitHub, filled by train_models.py
+├── reports/figures/      SHAP plots
 ├── src/
 │   ├── config.py         paths, constants, threshold
 │   ├── data_prep.py      split, clean, scale

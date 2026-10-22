@@ -11,16 +11,37 @@ Banks lose money when they lend to people who do not repay, and lose business wh
 | Model | Train AUC | Validation AUC |
 |---|---|---|
 | Logistic Regression (baseline) | 0.851 | 0.859 |
+| Decision Tree (unrestricted) | 1.000 | 0.616 |
 | Decision Tree (restricted) | 0.855 | 0.858 |
 | Random Forest | 0.870 | 0.871 |
 | **XGBoost (final)** | 0.880 | **0.872** |
 
-The test-set AUC, confusion matrix and classification report are printed when you run `src/train_models.py`.
+### Final test-set performance (XGBoost, 22,500 borrowers)
+
+**Test ROC-AUC: 0.873**, in line with the validation AUC (0.872), so the model is not overfitting to the validation set.
+
+Confusion matrix at threshold 0.2 (rows = actual, columns = predicted):
+
+| | Predicted OK | Predicted default |
+|---|---|---|
+| **Actually OK** | 19,779 | 1,217 |
+| **Actually defaulted** | 727 | 777 |
+
+| Class | Precision | Recall | F1 |
+|---|---|---|---|
+| 0 (repaid) | 0.96 | 0.94 | 0.95 |
+| 1 (default) | 0.39 | 0.52 | 0.44 |
+
+At this threshold the model catches about half of the real defaulters (recall 0.52). About 4 in 10 borrowers it flags actually default (precision 0.39). Moving the threshold trades one for the other.
+
+### SHAP explainability
+
+![SHAP summary](reports/figures/shap_summary.png)
 
 Things worth noting:
-- An unrestricted decision tree scores about 1.0 on training data but far lower on validation. It is kept in the code on purpose to show overfitting.
-- Hyperparameter search (RandomizedSearchCV) gave validation AUC of about 0.871, no real gain over the hand-picked settings, so it was dropped.
-- The three advanced models are close. The extra gain from XGBoost over logistic regression is small but consistent.
+- The unrestricted decision tree scores about 1.0 on training data but only 0.616 on validation, a clear case of overfitting. It is kept in the code on purpose to show this.
+- Hyperparameter search (RandomizedSearchCV) gave a validation AUC of about 0.871, no real gain over the hand-picked settings, so it was dropped.
+- The three advanced models are close. XGBoost's gain over logistic regression is small but consistent.
 
 ## How it works
 
